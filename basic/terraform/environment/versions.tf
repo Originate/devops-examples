@@ -22,6 +22,10 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "2.0.2"
     }
+    null = {
+      source  = "hashicorp/null"
+      version = "3.1.0"
+    }
     random = {
       source  = "hashicorp/random"
       version = "3.1.0"
@@ -29,6 +33,10 @@ terraform {
     time = {
       source  = "hashicorp/time"
       version = "0.7.0"
+    }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "3.1.0"
     }
   }
 }

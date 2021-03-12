@@ -155,3 +155,15 @@ variable "rds_skip_final_snapshot" {
   description = "Determines whether a final DB snapshot is created before RDS instances are deleted"
   type        = bool
 }
+
+# Bastion
+
+variable "bastion_ssh_port" {
+  description = "The port number where the bastion host should listen for SSH"
+  type        = number
+
+  validation {
+    condition     = var.bastion_ssh_port >= 1025 && var.bastion_ssh_port <= 65535
+    error_message = "The bastion_ssh_port value must be between 1025 and 65535, inclusive."
+  }
+}

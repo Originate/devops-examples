@@ -45,3 +45,7 @@ rds_backup_retention_period    = 7
 rds_enable_enhanced_monitoring = false
 rds_enable_delete_protection   = false
 rds_skip_final_snapshot        = true
+
+# Bastion
+
+bastion_ssh_port = 62622
