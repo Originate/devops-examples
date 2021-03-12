@@ -20,6 +20,19 @@ variable "stack" {
   type        = string
 }
 
+variable "append_secrets" {
+  description = "Override this value to add environment secrets the Terraform state (overwrites a value if it already exists and takes priority over var.remove_secrets)"
+  type        = map(string)
+  sensitive   = true
+  default     = {}
+}
+
+variable "remove_secrets" {
+  description = "Override this value to delete environment secrets (by key) from the Terraform state"
+  type        = list(string)
+  default     = []
+}
+
 # AWS
 
 variable "aws_base_domain" {
