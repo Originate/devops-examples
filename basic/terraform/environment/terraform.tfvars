@@ -7,7 +7,8 @@ stack      = "mystack"
 
 # AWS
 
-aws_base_domain = "mystack.originate.com"
+aws_base_domain                     = "mystack.originate.com"
+aws_kms_key_deletion_window_in_days = 7
 
 # VPC
 
@@ -25,3 +26,12 @@ vpc_database_subnet_cidrs = [
   "172.31.64.0/20",
   "172.31.80.0/20"
 ]
+
+# EKS
+
+eks_node_instance_class                  = "t3.medium"
+eks_node_disk_size                       = 50
+eks_node_count_min                       = 2
+eks_node_count_max                       = 3
+eks_kubernetes_version                   = "1.19"
+eks_aws_load_balancer_controller_version = "1.1.5"

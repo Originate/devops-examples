@@ -40,6 +40,16 @@ variable "aws_base_domain" {
   type        = string
 }
 
+variable "aws_kms_key_deletion_window_in_days" {
+  description = "Duration in days after which the key is deleted after destruction of the resource"
+  type        = number
+
+  validation {
+    condition     = var.aws_kms_key_deletion_window_in_days >= 7 && var.aws_kms_key_deletion_window_in_days <= 30
+    error_message = "The aws_kms_key_deletion_window_in_days value must be between 7 and 30 days, inclusive."
+  }
+}
+
 # VPC
 
 variable "vpc_az_count" {
@@ -65,4 +75,36 @@ variable "vpc_private_subnet_cidrs" {
 variable "vpc_database_subnet_cidrs" {
   description = "A list of CIDR blocks to use for the VPC database subnets"
   type        = list(string)
+}
+
+# EKS
+
+variable "eks_node_instance_class" {
+  description = "The EC2 instance class type of the nodes"
+  type        = string
+}
+
+variable "eks_node_disk_size" {
+  description = "The disk size of the nodes"
+  type        = number
+}
+
+variable "eks_node_count_min" {
+  description = "The minimum number of nodes"
+  type        = number
+}
+
+variable "eks_node_count_max" {
+  description = "The maximum number of nodes"
+  type        = number
+}
+
+variable "eks_kubernetes_version" {
+  description = "The version of Kubernetes to use for the EKS cluster"
+  type        = string
+}
+
+variable "eks_aws_load_balancer_controller_version" {
+  description = "Version of the AWS Load Balancer Controller to run"
+  type        = string
 }
