@@ -39,3 +39,30 @@ variable "aws_base_domain" {
   description = "The base domain name for the stack"
   type        = string
 }
+
+# VPC
+
+variable "vpc_az_count" {
+  description = "The number of availability zones to use for the VPC"
+  type        = number
+}
+
+variable "vpc_cidr" {
+  description = "The CIDR block for the VPC"
+  type        = string
+}
+
+variable "vpc_public_subnet_cidrs" {
+  description = "A list of CIDR blocks to use for the VPC public subnets"
+  type        = list(string)
+}
+
+variable "vpc_private_subnet_cidrs" {
+  description = "A list of CIDR blocks to use for the VPC private subnets"
+  type        = list(string)
+}
+
+variable "vpc_database_subnet_cidrs" {
+  description = "A list of CIDR blocks to use for the VPC database subnets"
+  type        = list(string)
+}
