@@ -35,3 +35,13 @@ eks_node_count_min                       = 2
 eks_node_count_max                       = 3
 eks_kubernetes_version                   = "1.19"
 eks_aws_load_balancer_controller_version = "1.1.5"
+
+# RDS
+
+rds_instance_class             = "db.t3.micro"
+rds_allocated_storage          = 20
+rds_multi_az                   = false
+rds_backup_retention_period    = 7
+rds_enable_enhanced_monitoring = false
+rds_enable_delete_protection   = false
+rds_skip_final_snapshot        = true

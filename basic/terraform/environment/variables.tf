@@ -108,3 +108,50 @@ variable "eks_aws_load_balancer_controller_version" {
   description = "Version of the AWS Load Balancer Controller to run"
   type        = string
 }
+
+# RDS
+
+variable "rds_instance_class" {
+  description = "The RDS instance class type"
+  type        = string
+}
+
+variable "rds_allocated_storage" {
+  description = "The allocated storage for RDS instances in gibibytes"
+  type        = number
+
+  validation {
+    condition     = var.rds_allocated_storage >= 20 && var.rds_allocated_storage <= 65536
+    error_message = "The rds_allocated_storage value must be between 20 and 65,536 GiB, inclusive."
+  }
+}
+
+variable "rds_multi_az" {
+  description = "Specifies if RDS instances are multi-AZ"
+  type        = bool
+}
+
+variable "rds_backup_retention_period" {
+  description = "The number of days to retain RDS backups"
+  type        = number
+
+  validation {
+    condition     = var.rds_backup_retention_period >= 0 && var.rds_backup_retention_period <= 35
+    error_message = "The rds_backup_retention_period value must be between 0 and 35 days, inclusive."
+  }
+}
+
+variable "rds_enable_enhanced_monitoring" {
+  description = "Enable RDS Enhanced Monitoring metrics"
+  type        = bool
+}
+
+variable "rds_enable_delete_protection" {
+  description = "Disable deletion of RDS instances"
+  type        = bool
+}
+
+variable "rds_skip_final_snapshot" {
+  description = "Determines whether a final DB snapshot is created before RDS instances are deleted"
+  type        = bool
+}
