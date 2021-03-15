@@ -1,0 +1,9 @@
+# General
+Dockerfile
+*.Dockerfile
+.dockerignore
+*.md
+
+# Node
+**/node_modules
+nodemon.json
