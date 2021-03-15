@@ -1,0 +1,8 @@
+# Overrides for running packaged builds locally
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile

@@ -1,0 +1,24 @@
+version: "3.8"
+
+x-db-password: &postgres-password password
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: *postgres-password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    environment:
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
