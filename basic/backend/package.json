@@ -1,0 +1,16 @@
+{
+  "name": "basic_backend",
+  "version": "1.0.0",
+  "description": "Basic web API server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "watch": "nodemon server.js"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
