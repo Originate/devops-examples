@@ -3,6 +3,8 @@ terraform {
     workspace_key_prefix = "environment"
     key                  = "terraform.tfstate"
   }
+
+  experiments = [module_variable_optional_attrs]
 }
 
 locals {

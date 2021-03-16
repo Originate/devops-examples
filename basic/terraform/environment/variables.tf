@@ -167,3 +167,22 @@ variable "bastion_ssh_port" {
     error_message = "The bastion_ssh_port value must be between 1025 and 65535, inclusive."
   }
 }
+
+# MyStack
+
+variable "override_docker_tags" {
+  description = "Override this value to update the Docker image tag for specific components (takes priority over var.universal_docker_tag)"
+  type = object({
+    # Key names must match the name of the repository
+    backend = optional(string)
+  })
+  default = {}
+}
+
+# Convenient shortcut for overriding all tags at once without needing to specify
+# each of them individually through var.override_docker_tags
+variable "universal_override_docker_tag" {
+  description = "Override this value to update the Docker image tag for all components that do not have a specific value provided in var.override_docker_tags"
+  type        = string
+  default     = ""
+}
