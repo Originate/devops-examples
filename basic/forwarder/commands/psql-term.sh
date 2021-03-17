@@ -15,14 +15,14 @@ fi
 
 SERVICE="$1"
 
-DB_CFG="$(kubectl -n "$STACK" get secret "$SERVICE-database-config" -o json)"
+PGCFG="$(kubectl -n "$STACK" get secret "$SERVICE-db-config" -o json)"
 
-DB_HOST="$(echo "$DB_CFG" | jq -r '.data.DB_HOST' | base64 -d)"
-DB_PORT="$(echo "$DB_CFG" | jq -r '.data.DB_PORT' | base64 -d)"
-DB_NAME="$(echo "$DB_CFG" | jq -r '.data.DB_NAME' | base64 -d)"
-DB_USERNAME="$(echo "$DB_CFG" | jq -r '.data.DB_USERNAME' | base64 -d)"
-DB_PASSWORD="$(echo "$DB_CFG" | jq -r '.data.DB_PASSWORD' | base64 -d)"
+PGHOST="$(echo "$PGCFG" | jq -r '.data.PGHOST' | base64 -d)"
+PGPORT="$(echo "$PGCFG" | jq -r '.data.PGPORT' | base64 -d)"
+PGDATABASE="$(echo "$PGCFG" | jq -r '.data.PGDATABASE' | base64 -d)"
+PGUSER="$(echo "$PGCFG" | jq -r '.data.PGUSER' | base64 -d)"
+PGPASSWORD="$(echo "$PGCFG" | jq -r '.data.PGPASSWORD' | base64 -d)"
 
-ssh -4fNv -L "0.0.0.0:5432:$DB_HOST:$DB_PORT" -o StrictHostKeyChecking=no -E /var/log/ssh.log ssh-user@localhost -p 62622
+ssh -4fNv -L "0.0.0.0:5432:$PGHOST:$PGPORT" -o StrictHostKeyChecking=no -E /var/log/ssh.log ssh-user@localhost -p 65535
 
-PGPASSWORD="$DB_PASSWORD" psql --host="localhost" --port="5432" --username="$DB_USERNAME" --dbname="$DB_NAME"
+PGPASSWORD="$PGPASSWORD" psql --host="localhost" --port="5432" --username="$PGUSER" --dbname="$PGDATABASE"

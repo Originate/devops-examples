@@ -15,11 +15,11 @@ fi
 
 SERVICE="$1"
 
-DB_CFG="$(kubectl -n "$STACK" get secret "$SERVICE-database-config" -o json)"
+PGCFG="$(kubectl -n "$STACK" get secret "$SERVICE-db-config" -o json)"
 
-DB_HOST="$(echo "$DB_CFG" | jq -r '.data.DB_HOST' | base64 -d)"
-DB_PORT="$(echo "$DB_CFG" | jq -r '.data.DB_PORT' | base64 -d)"
+PGHOST="$(echo "$PGCFG" | jq -r '.data.PGHOST' | base64 -d)"
+PGPORT="$(echo "$PGCFG" | jq -r '.data.PGPORT' | base64 -d)"
 
-LOCAL_PORT="${2:-"$DB_PORT"}"
+LOCAL_PORT="${2:-"$PGPORT"}"
 
-port-forward "$DB_HOST" "$DB_PORT" "$LOCAL_PORT"
+port-forward "$PGHOST" "$PGPORT" "$LOCAL_PORT"

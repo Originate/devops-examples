@@ -1,6 +1,6 @@
 locals {
   container_port    = 3000
-  health_check_path = "/"
+  health_check_path = "/healthcheck"
 }
 
 module "kubernetes" {
@@ -30,11 +30,12 @@ module "kubernetes" {
 
   secrets = {
     db-config = {
-      DB_HOST     = module.rds.host
-      DB_PORT     = module.rds.port
-      DB_NAME     = module.rds.database
-      DB_USERNAME = module.rds.username
-      DB_PASSWORD = module.rds.password
+      PGHOST     = module.rds.host
+      PGPORT     = module.rds.port
+      PGDATABASE = module.rds.database
+      PGUSER     = module.rds.username
+      PGPASSWORD = module.rds.password
+      PGSSLMODE  = "no-verify"
     }
   }
 }

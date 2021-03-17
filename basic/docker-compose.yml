@@ -1,12 +1,18 @@
 version: "3.8"
 
-x-db-password: &postgres-password password
+x-postgres-db: &postgres-db postgres
+x-postgres-user: &postgres-user postgres
+x-postgres-password: &postgres-password password
 
 services:
   postgres:
     image: postgres
     environment:
+      POSTGRES_DB: *postgres-db
+      POSTGRES_USER: *postgres-user
       POSTGRES_PASSWORD: *postgres-password
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
@@ -14,6 +20,11 @@ services:
   backend:
     environment:
       PORT: 3000
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: *postgres-db
+      PGUSER: *postgres-user
+      PGPASSWORD: *postgres-password
     ports:
       - "3000:3000"
     restart: unless-stopped

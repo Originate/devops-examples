@@ -22,6 +22,6 @@ if [ $LOCAL_PORT -eq 65535 ]; then
   exit 2
 fi
 
-ssh -4fNv -L "0.0.0.0:$LOCAL_PORT:$DEST_HOST:$DEST_PORT" -o StrictHostKeyChecking=no -E /var/log/ssh.log ssh-user@localhost -p 62622
+ssh -4fNv -L "0.0.0.0:$LOCAL_PORT:$DEST_HOST:$DEST_PORT" -o StrictHostKeyChecking=no -E /var/log/ssh.log ssh-user@localhost -p 65535
 
 tail -f /var/log/ssh.log
