@@ -31,5 +31,10 @@ services:
     depends_on:
       - postgres
 
+  frontend:
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
 volumes:
   pgdata:

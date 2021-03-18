@@ -8,3 +8,10 @@ services:
       dockerfile: dev.Dockerfile
     volumes:
       - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./frontend/src:/usr/share/nginx/html
