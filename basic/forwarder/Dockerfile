@@ -8,7 +8,6 @@ RUN apt-get -y -qq update && \
         bind9-host \
         curl \
         groff-base \
-        jq \
         less \
         netcat \
         openssh-client \
@@ -17,6 +16,9 @@ RUN apt-get -y -qq update && \
         unzip \
         vim \
     && rm -rf /var/lib/apt/lists/*
+
+# Manually install jq (Debian is still stuck on version 1.5 as of March 2021)
+RUN curl -o /usr/local/bin/jq -LO "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64" && chmod a+x /usr/local/bin/jq
 
 # Install AWS CLI
 RUN curl -LO https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip && \

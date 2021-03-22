@@ -15,10 +15,10 @@ fi
 
 SERVICE="$1"
 
-PGCFG="$(kubectl -n "$STACK" get secret "$SERVICE-db-config" -o json)"
+PGCFG="$(pg-credentials "$SERVICE")"
 
-PGHOST="$(echo "$PGCFG" | jq -r '.data.PGHOST' | base64 -d)"
-PGPORT="$(echo "$PGCFG" | jq -r '.data.PGPORT' | base64 -d)"
+PGHOST="$(echo "$PGCFG" | jq -r '.PGHOST')"
+PGPORT="$(echo "$PGCFG" | jq -r '.PGPORT')"
 
 LOCAL_PORT="${2:-"$PGPORT"}"
 

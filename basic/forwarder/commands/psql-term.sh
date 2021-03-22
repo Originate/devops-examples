@@ -15,13 +15,13 @@ fi
 
 SERVICE="$1"
 
-PGCFG="$(kubectl -n "$STACK" get secret "$SERVICE-db-config" -o json)"
+PGCFG="$(pg-credentials "$SERVICE")"
 
-PGHOST="$(echo "$PGCFG" | jq -r '.data.PGHOST' | base64 -d)"
-PGPORT="$(echo "$PGCFG" | jq -r '.data.PGPORT' | base64 -d)"
-PGDATABASE="$(echo "$PGCFG" | jq -r '.data.PGDATABASE' | base64 -d)"
-PGUSER="$(echo "$PGCFG" | jq -r '.data.PGUSER' | base64 -d)"
-PGPASSWORD="$(echo "$PGCFG" | jq -r '.data.PGPASSWORD' | base64 -d)"
+PGHOST="$(echo "$PGCFG" | jq -r '.PGHOST')"
+PGPORT="$(echo "$PGCFG" | jq -r '.PGPORT')"
+PGDATABASE="$(echo "$PGCFG" | jq -r '.PGDATABASE')"
+PGUSER="$(echo "$PGCFG" | jq -r '.PGUSER')"
+PGPASSWORD="$(echo "$PGCFG" | jq -r '.PGPASSWORD')"
 
 ssh -4fNv -L "0.0.0.0:5432:$PGHOST:$PGPORT" -o StrictHostKeyChecking=no -E /var/log/ssh.log ssh-user@localhost -p 65535
 
