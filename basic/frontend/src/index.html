@@ -3,6 +3,28 @@
     <title>Basic frontend</title>
   </head>
   <body>
-    Hello, World
+    <h1>The API server is <span id="status"/></h1>
+    <p>
+      Last checked at <span id="timestamp"/>
+    </p>
+    <button type="button" onclick="checkHealth()">Refresh</button>
+    <script>
+      function checkHealth() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (this.readyState == 4) {
+            if (this.status == 200) {
+              document.getElementById('status').innerHTML = this.responseText;
+            } else {
+              document.getElementById('status').innerHTML = 'Failing';
+            }
+            document.getElementById('timestamp').innerHTML = new Date().toLocaleString();
+          }
+        };
+        xhr.open('GET', '/api/healthcheck', true);
+        xhr.send();
+      }
+      window.onload = checkHealth;
+    </script>
   </body>
 </html>

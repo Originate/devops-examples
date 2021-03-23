@@ -5,6 +5,12 @@ x-postgres-user: &postgres-user postgres
 x-postgres-password: &postgres-password password
 
 services:
+  ingress:
+    build: ingress
+    ports:
+      - "8000:80"
+    restart: unless-stopped
+
   postgres:
     image: postgres
     environment:
@@ -35,6 +41,8 @@ services:
     ports:
       - "8080:8080"
     restart: unless-stopped
+    depends_on:
+      - backend
 
 volumes:
   pgdata:

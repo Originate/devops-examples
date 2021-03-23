@@ -1,6 +1,6 @@
 locals {
   container_port    = 3000
-  health_check_path = "/healthcheck"
+  health_check_path = "/api/healthcheck"
 }
 
 module "kubernetes" {

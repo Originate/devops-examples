@@ -2,6 +2,7 @@
 
 const express = require('express');
 const { Pool } = require('pg');
+const morgan = require('morgan')
 
 // Server config
 const HOST = process.env.HOST || '0.0.0.0';
@@ -11,11 +12,13 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 const pool = new Pool();
 
+app.use(morgan('combined'))
+
 app.get('/', (req, res) => {
   res.send('Hello, World');
 });
 
-app.get('/healthcheck', async (req, res) => {
+app.get('/api/healthcheck', async (req, res) => {
   try {
     await pool.query('SELECT 1');
     res.send('Healthy');
