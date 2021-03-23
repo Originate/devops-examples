@@ -34,12 +34,28 @@ module "ingress" {
   route53_zone_id      = module.aws.route53_zone_id
   acm_certificate_arn  = module.aws.acm_certificate_arn
 
-  ingress_path_backends = {
-    "/*" = {
+  ingress_path_backends = [
+    {
+      pattern      = "/api/*"
       service_name = module.backend.service_name
       service_port = module.backend.service_port
+    },
+    {
+      pattern      = "/*"
+      service_name = module.frontend.service_name
+      service_port = module.frontend.service_port
     }
-  }
+  ]
+}
+
+module "frontend" {
+  source = "./modules/frontend"
+
+  kubernetes_namespace = kubernetes_namespace.stack.metadata[0].name
+  docker_repo          = data.aws_ecr_repository.service["frontend"].repository_url
+  docker_tag           = local.docker_tags["frontend"]
+  autoscale_max        = 1
+  autoscale_min        = 1
 }
 
 module "backend" {

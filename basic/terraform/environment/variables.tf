@@ -174,7 +174,8 @@ variable "override_docker_tags" {
   description = "Override this value to update the Docker image tag for specific components (takes priority over var.universal_docker_tag)"
   type = object({
     # Key names must match the name of the repository
-    backend = optional(string)
+    backend  = optional(string)
+    frontend = optional(string)
   })
   default = {}
 }
