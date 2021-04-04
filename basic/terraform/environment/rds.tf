@@ -5,6 +5,7 @@ locals {
   rds_attributes = {
     stack                      = var.stack
     env                        = terraform.workspace
+    default_tags               = local.default_tags
     vpc_id                     = module.vpc.id
     subnet_ids                 = module.vpc.database_subnet_ids
     allowed_security_group_ids = [module.eks.cluster_security_group_id]

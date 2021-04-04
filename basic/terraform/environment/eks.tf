@@ -1,8 +1,9 @@
 module "eks" {
-  source = "github.com/originate/terraform-modules/aws/eks"
+  source = "github.com/Originate/terraform-modules//aws/eks?ref=0a5d76f"
 
-  stack = var.stack
-  env   = terraform.workspace
+  stack        = var.stack
+  env          = terraform.workspace
+  default_tags = local.default_tags
 
   kubernetes_version  = var.eks_kubernetes_version
   vpc_id              = module.vpc.id

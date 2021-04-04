@@ -25,10 +25,9 @@ resource "kubernetes_namespace" "stack" {
 }
 
 module "ingress" {
-  source = "github.com/originate/terraform-modules/custom/alb_kubernetes_ingress"
+  source = "github.com/Originate/terraform-modules//kubernetes/alb_ingress?ref=0a5d76f"
 
-  stack = var.stack
-  env   = terraform.workspace
+  default_tags = local.default_tags
 
   kubernetes_namespace = kubernetes_namespace.stack.metadata[0].name
   route53_zone_id      = module.aws.route53_zone_id
