@@ -1,0 +1,13 @@
+name: Basic Example - Test
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  placeholder-test:
+    name: Placeholder test
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo noop

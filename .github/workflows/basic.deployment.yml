@@ -1,0 +1,143 @@
+name: Basic Example - Deploy
+on:
+  workflow_run:
+    workflows:
+      - Basic Example - Test
+    branches:
+      - main
+    types:
+      - completed
+  push:
+    tags:
+      - deployment/*/*
+
+jobs:
+  plan-global:
+    name: Generate plan for global Terraform changes
+    runs-on: ubuntu-latest
+    outputs:
+      needs_apply: ${{ steps.terraform-plan.outputs.needs_apply }}
+      plan_filename: ${{ steps.terraform-plan.outputs.plan_filename }}
+    if: ${{ github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Terraform init
+        uses: ./.github/actions/terraform-init
+        with:
+          working_directory: basic/terraform/global
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-2
+          aws_profile: mystack
+
+      - name: Terraform plan
+        id: terraform-plan
+        uses: ./.github/actions/terraform-plan
+        with:
+          working_directory: basic/terraform/global
+
+      - name: Upload Terraform plan file
+        if: ${{ steps.terraform-plan.outputs.needs_apply }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.terraform-plan.outputs.plan_filename }}
+          path: ${{ steps.terraform-plan.outputs.plan_filepath }}
+
+  apply-global:
+    name: Apply global Terraform changes
+    runs-on: ubuntu-latest
+    needs: plan-global
+    environment:
+      name: basic-global
+    if: ${{ needs.plan-global.outputs.needs_apply }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download Terraform plan file
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ needs.plan-global.outputs.plan_filename }}
+          path: ${{ runner.temp }}
+
+      - name: Terraform init
+        uses: ./.github/actions/terraform-init
+        with:
+          working_directory: basic/terraform/global
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-2
+          aws_profile: mystack
+
+      - name: Terraform apply
+        uses: ./.github/actions/terraform-apply
+        with:
+          working_directory: basic/terraform/global
+          plan_filepath: ${{ runner.temp }}/${{ needs.plan-global.outputs.plan_filename }}
+
+  plan-environment:
+    name: Generate plan for environment Terraform changes
+    runs-on: ubuntu-latest
+    needs: apply-global
+    outputs:
+      needs_apply: ${{ steps.terraform-plan.outputs.needs_apply }}
+      plan_filename: ${{ steps.terraform-plan.outputs.plan_filename }}
+      terraform_workspace: ${{ steps.terraform-init.outputs.terraform_workspace }}
+    if: ${{ !failure() && !cancelled() }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Terraform init
+        id: terraform-init
+        uses: ./.github/actions/terraform-init
+        with:
+          working_directory: basic/terraform/environment
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-2
+          aws_profile: mystack
+
+      - name: Terraform plan
+        id: terraform-plan
+        uses: ./.github/actions/terraform-plan
+        with:
+          working_directory: basic/terraform/environment
+          terraform_args: -var 'universal_override_docker_tag=${{ steps.terraform-init.outputs.terraform_workspace }}-${{ github.run_number }}'
+
+      - name: Upload Terraform plan file
+        if: ${{ steps.terraform-plan.outputs.needs_apply }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ steps.terraform-plan.outputs.plan_filename }}
+          path: ${{ steps.terraform-plan.outputs.plan_filepath }}
+
+  apply-environment:
+    name: Apply environment Terraform changes
+    runs-on: ubuntu-latest
+    needs: plan-environment
+    environment:
+      name: basic-${{ needs.plan-environment.outputs.terraform_workspace }}
+    if: ${{ !failure() && !cancelled() && needs.plan-environment.outputs.needs_apply }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download Terraform plan file
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ needs.plan-environment.outputs.plan_filename }}
+          path: ${{ runner.temp }}
+
+      - name: Terraform init
+        uses: ./.github/actions/terraform-init
+        with:
+          working_directory: basic/terraform/environment
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-2
+          aws_profile: mystack
+
+      - name: Terraform apply
+        uses: ./.github/actions/terraform-apply
+        with:
+          working_directory: basic/terraform/environment
+          plan_filepath: ${{ runner.temp }}/${{ needs.plan-environment.outputs.plan_filename }}

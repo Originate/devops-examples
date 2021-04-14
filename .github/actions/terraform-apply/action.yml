@@ -1,0 +1,16 @@
+name: Terraform Apply
+description: Applies Terraform changes
+
+inputs:
+  working_directory:
+    required: true
+  plan_filepath:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Apply changes
+      run: terraform apply -lock-timeout=10m '${{ inputs.plan_filepath }}'
+      working-directory: ${{ inputs.working_directory }}
+      shell: bash

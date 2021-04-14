@@ -1,0 +1,45 @@
+name: Terraform Plan
+description: Generates a Terraform execution plan
+
+inputs:
+  working_directory:
+    required: true
+  terraform_args:
+    required: false
+
+outputs:
+  needs_apply:
+    value: ${{ steps.create-plan.outputs.needs_apply }}
+  plan_filename:
+    value: ${{ steps.create-plan.outputs.plan_filename }}
+  plan_filepath:
+    value: ${{ steps.create-plan.outputs.plan_filepath }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create plan
+      id: create-plan
+      run: |
+        BASENAME="$(basename '${{ inputs.working_directory }}')"
+        if [ "$BASENAME" == "environment" ]; then
+          PLAN_FILENAME="$TF_WORKSPACE-$GITHUB_RUN_NUMBER.tfplan"
+        else
+          PLAN_FILENAME="$BASENAME-$GITHUB_RUN_NUMBER.tfplan"
+        fi
+        PLAN_FILEPATH="${{ runner.temp }}/$PLAN_FILENAME"
+        set +e
+        terraform plan ${{ inputs.terraform_args }} -input=false -lock-timeout=10m -detailed-exitcode -out="$PLAN_FILEPATH"
+        case $? in
+          0) echo "No changes found"
+             ;;
+          2) echo "Found unapplied changes"
+             echo "::set-output name=plan_filename::$PLAN_FILENAME"
+             echo "::set-output name=plan_filepath::$PLAN_FILEPATH"
+             echo "::set-output name=needs_apply::true"
+             ;;
+          *) exit $?
+             ;;
+        esac
+      working-directory: ${{ inputs.working_directory }}
+      shell: bash
