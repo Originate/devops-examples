@@ -51,8 +51,23 @@ RUN eval 'aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID" --profile "$S
 
 ENV AWS_PROFILE=$STACK
 
-# Configure kubectl
+# Bootstrap
+COPY commands bin
+COPY entrypoint.sh ./
+
+RUN for file in bin/*.sh; do mv "$file" "${file%.sh}"; done
+
 ARG ENV=dev
+ENV STACK=$STACK \
+    ENV=$ENV
+
+ENTRYPOINT ["./entrypoint.sh"]
+CMD []
+
+# Configure kubectl
+
+### Pass `--build-arg CACHE_BUST="$(date +%s)"` during build to invalidate the cache for subsequent lines
+ARG CACHE_BUST
 
 RUN aws eks update-kubeconfig --name="$STACK-$ENV-eks"
 
@@ -60,15 +75,3 @@ RUN aws eks update-kubeconfig --name="$STACK-$ENV-eks"
 RUN mkdir -p "$HOME/.ssh" && \
     kubectl -n bastion get secret bastion-ssh-key -o json | jq -r '.data.private_key_pem' | base64 -d > "$HOME/.ssh/id_rsa" && \
     chmod 400 "$HOME/.ssh/id_rsa"
-
-# Bootstrap
-COPY commands bin
-COPY entrypoint.sh ./
-
-RUN for file in bin/*.sh; do mv "$file" "${file%.sh}"; done
-
-ENV STACK=$STACK \
-    ENV=$ENV
-
-ENTRYPOINT ["./entrypoint.sh"]
-CMD []

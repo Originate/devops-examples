@@ -24,7 +24,7 @@ if [ "$#" -gt 0 ]; then
   exec "$@"
 else
   echo 'Available commands:'
-  for file in /$PWD/bin/*; do
+  for file in /"$PWD"/bin/*; do
     $file -h | sed 's/^Usage: /  /'
   done
 fi

@@ -54,5 +54,6 @@ docker build \
   --build-arg AWS_ACCESS_KEY_ID \
   --build-arg AWS_SECRET_ACCESS_KEY \
   --build-arg AWS_DEFAULT_REGION \
+  --build-arg CACHE_BUST="$(date +%s)" \
   -t "$IMAGE" \
   .

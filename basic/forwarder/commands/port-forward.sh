@@ -17,7 +17,7 @@ DEST_HOST="$1"
 DEST_PORT="$2"
 LOCAL_PORT="${3:-"$DEST_PORT"}"
 
-if [ $LOCAL_PORT -eq 65535 ]; then
+if [ "$LOCAL_PORT" -eq 65535 ]; then
   echo "Port 65535 is reserved for connecting to the bastion host"
   exit 2
 fi
