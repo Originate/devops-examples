@@ -28,7 +28,7 @@ variable "domain" {
   type        = string
 }
 
-variable "repo_names" {
+variable "ecr_repository_names" {
   description = "A list of the ECR repository names"
   type        = list(string)
 }

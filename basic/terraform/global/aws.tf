@@ -7,11 +7,11 @@ locals {
 }
 
 module "aws" {
-  source = "github.com/Originate/terraform-modules//aws/base_global?ref=0a5d76f"
+  source = "github.com/Originate/terraform-modules//aws/base_global?ref=c50291f"
 
   stack        = var.stack
   default_tags = local.default_tags
 
-  domain     = var.domain
-  repo_names = var.repo_names
+  domain               = var.domain
+  ecr_repository_names = var.ecr_repository_names
 }

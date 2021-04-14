@@ -4,7 +4,7 @@ region     = "us-west-2"
 stack      = "mystack"
 env        = "global"
 domain     = "mystack.originate.com"
-repo_names = [
+ecr_repository_names = [
   "backend",
   "frontend"
 ]

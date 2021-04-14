@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "github.com/Originate/terraform-modules//aws/vpc?ref=0a5d76f"
+  source = "github.com/Originate/terraform-modules//aws/vpc?ref=c50291f"
 
   stack        = var.stack
   env          = terraform.workspace

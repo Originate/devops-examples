@@ -1,19 +1,19 @@
-resource "aws_ecr_repository" "bastion" {
-  name = "${var.stack}-${terraform.workspace}-bastion"
+module "bastion_ecr" {
+  source = "github.com/Originate/terraform-modules//aws/ecr?ref=c50291f"
 
-  image_scanning_configuration {
-    scan_on_push = true
-  }
+  stack        = var.stack
+  default_tags = local.default_tags
 
-  tags = local.default_tags
+  name             = "bastion/${terraform.workspace}"
+  keep_image_count = 10
 }
 
 module "bastion" {
-  source = "github.com/Originate/terraform-modules//kubernetes/bastion?ref=0a5d76f"
+  source = "github.com/Originate/terraform-modules//kubernetes/bastion?ref=c50291f"
 
   ssh_port             = var.bastion_ssh_port
-  repo_url             = aws_ecr_repository.bastion.repository_url
-  docker_login_command = "eval '$(aws ecr get-login --no-include-email --profile ${var.profile})'"
+  docker_repo          = module.bastion_ecr.repository_url
+  docker_login_command = local.ecr_login_command
 
 
   # Ensures all bastion host Kubernetes resources get deleted before removing
