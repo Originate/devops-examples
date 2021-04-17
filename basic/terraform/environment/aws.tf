@@ -4,7 +4,17 @@ locals {
     Stack       = var.stack
     Environment = terraform.workspace
   }
-  ecr_login_command = "aws ecr get-login-password --profile '${var.profile}' --region '${var.region}' | docker login --username AWS --password-stdin '${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com'"
+  # Retry a few times because Docker can be flakey with multiple concurrent
+  # login attempts on macOS, which can happen if multiple Docker pushes get
+  # triggered around the same time
+  ecr_login_command = <<-EOT
+    for i in {1..5}; do
+      if aws ecr get-login-password --profile '${var.profile}' --region '${var.region}' | docker login --username AWS --password-stdin '${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com'; then
+        break
+      fi
+      sleep 1
+    done
+  EOT
 }
 
 data "aws_caller_identity" "current" {}
