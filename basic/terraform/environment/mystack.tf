@@ -25,7 +25,7 @@ resource "kubernetes_namespace" "stack" {
 }
 
 module "ingress" {
-  source = "github.com/Originate/terraform-modules//kubernetes/alb_ingress?ref=c50291f"
+  source = "github.com/Originate/terraform-modules//kubernetes/alb_ingress?ref=d679df0"
 
   default_tags = local.default_tags
 
@@ -52,7 +52,7 @@ module "ingress" {
 }
 
 module "docker_push_frontend" {
-  source = "github.com/Originate/terraform-modules//docker/push?ref=c50291f"
+  source = "github.com/Originate/terraform-modules//docker/push?ref=d679df0"
 
   repo          = data.aws_ecr_repository.service["frontend"].repository_url
   tag           = local.docker_tags["frontend"]
@@ -76,7 +76,7 @@ module "frontend" {
 }
 
 module "docker_push_backend" {
-  source = "github.com/Originate/terraform-modules//docker/push?ref=c50291f"
+  source = "github.com/Originate/terraform-modules//docker/push?ref=d679df0"
 
   repo          = data.aws_ecr_repository.service["backend"].repository_url
   tag           = local.docker_tags["backend"]

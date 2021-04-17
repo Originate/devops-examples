@@ -4,7 +4,7 @@ locals {
 }
 
 module "kubernetes" {
-  source = "github.com/Originate/terraform-modules//kubernetes/application?ref=c50291f"
+  source = "github.com/Originate/terraform-modules//kubernetes/application?ref=d679df0"
 
   name                 = "backend"
   kubernetes_namespace = var.kubernetes_namespace
