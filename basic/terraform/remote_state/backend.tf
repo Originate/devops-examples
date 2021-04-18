@@ -7,7 +7,7 @@ locals {
 }
 
 module "backend" {
-  source = "github.com/Originate/terraform-modules//aws/s3_terraform_backend?ref=c50291f"
+  source = "github.com/Originate/terraform-modules//aws/s3_terraform_backend?ref=e33985e"
 
   stack        = var.stack
   default_tags = local.default_tags

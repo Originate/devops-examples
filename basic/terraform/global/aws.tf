@@ -7,7 +7,7 @@ locals {
 }
 
 module "aws" {
-  source = "github.com/Originate/terraform-modules//aws/base_global?ref=c50291f"
+  source = "github.com/Originate/terraform-modules//aws/base_global?ref=e33985e"
 
   stack        = var.stack
   default_tags = local.default_tags

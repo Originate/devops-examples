@@ -1,5 +1,5 @@
 module "bastion_ecr" {
-  source = "github.com/Originate/terraform-modules//aws/ecr?ref=d679df0"
+  source = "github.com/Originate/terraform-modules//aws/ecr?ref=e33985e"
 
   stack        = var.stack
   default_tags = local.default_tags
@@ -9,7 +9,7 @@ module "bastion_ecr" {
 }
 
 module "bastion" {
-  source = "github.com/Originate/terraform-modules//kubernetes/bastion?ref=d679df0"
+  source = "github.com/Originate/terraform-modules//kubernetes/bastion?ref=e33985e"
 
   ssh_port             = var.bastion_ssh_port
   docker_repo          = module.bastion_ecr.repository_url
