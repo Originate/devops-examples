@@ -34,6 +34,16 @@ jobs:
           aws_region: us-west-2
           aws_profile: mystack
 
+      - name: Validate Terraform dependency lock file
+        run: |
+          if git diff --name-only . | grep -q '.terraform.lock.hcl'; then
+            echo 'Terraform dependency lock file has changed'
+            exit 1
+          else
+            echo 'Terraform dependency lock file is up to date'
+          fi
+        working-directory: basic/terraform/global
+
       - name: Terraform validate
         uses: ./.github/actions/terraform-validate
         with:
@@ -54,6 +64,16 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
           aws_profile: mystack
+
+      - name: Validate Terraform dependency lock file
+        run: |
+          if git diff --name-only . | grep -q '.terraform.lock.hcl'; then
+            echo 'Terraform dependency lock file has changed'
+            exit 1
+          else
+            echo 'Terraform dependency lock file is up to date'
+          fi
+        working-directory: basic/terraform/environment
 
       - name: Terraform validate
         uses: ./.github/actions/terraform-validate
