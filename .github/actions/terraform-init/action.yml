@@ -48,12 +48,13 @@ runs:
     - name: Configure Terraform workspace
       id: configure-workspace
       run: |
+        DEPLOY_REF_PREFIX="refs/tags/deployments/"
         if [ "$(basename '${{ inputs.working_directory }}')" != "environment" ]; then
           TF_WORKSPACE="default"
-        elif [ "$GITHUB_REF" == "refs/heads/main" ]; then
-          TF_WORKSPACE="dev"
+        elif grep -q "^$DEPLOY_REF_PREFIX" <<< "$GITHUB_REF"; then
+          TF_WORKSPACE="$(: "${GITHUB_REF#"$DEPLOY_REF_PREFIX"}"; echo "${_%%/*}")"
         else
-          TF_WORKSPACE="$(: "${GITHUB_REF#'refs/tags/deployment/'}"; echo "${_%%/*}")"
+          TF_WORKSPACE="dev"
         fi
         echo "Setting Terraform workspace to '$TF_WORKSPACE'"
         echo "::set-output name=terraform_workspace::$TF_WORKSPACE"

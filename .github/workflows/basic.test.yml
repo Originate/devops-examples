@@ -6,8 +6,53 @@ on:
       - main
 
 jobs:
-  placeholder-test:
-    name: Placeholder test
+  fmt:
+    name: Check Terraform formatting
     runs-on: ubuntu-latest
     steps:
-      - run: echo noop
+      - uses: actions/checkout@v2
+
+      - name: Terraform fmt
+        uses: ./.github/actions/terraform-fmt
+        with:
+          working_directory: basic/terraform
+
+  validate-global:
+    name: Validate global Terraform configuration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Terraform init
+        uses: ./.github/actions/terraform-init
+        with:
+          working_directory: basic/terraform/global
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-2
+          aws_profile: mystack
+
+      - name: Terraform validate
+        uses: ./.github/actions/terraform-validate
+        with:
+          working_directory: basic/terraform/global
+
+  validate-environment:
+    name: Validate environment Terraform configuration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Terraform init
+        uses: ./.github/actions/terraform-init
+        with:
+          working_directory: basic/terraform/environment
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: us-west-2
+          aws_profile: mystack
+
+      - name: Terraform validate
+        uses: ./.github/actions/terraform-validate
+        with:
+          working_directory: basic/terraform/environment

@@ -9,7 +9,7 @@ on:
       - completed
   push:
     tags:
-      - deployment/*/*
+      - deployments/*/*
 
 jobs:
   plan-global:

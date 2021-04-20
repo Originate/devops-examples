@@ -1,0 +1,20 @@
+name: Terraform Fmt
+description: Checks Terraform formatting
+
+inputs:
+  working_directory:
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check formatting
+      run: |
+        if terraform fmt -recursive -check -diff; then
+          echo 'No formatting issues found'
+        else
+          echo
+          echo 'Formatting issues found, run `terraform fmt` and re-commit'
+        fi
+      working-directory: ${{ inputs.working_directory }}
+      shell: bash
