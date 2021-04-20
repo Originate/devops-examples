@@ -15,6 +15,7 @@ jobs:
   plan-global:
     name: Generate plan for global Terraform changes
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     outputs:
       needs_apply: ${{ steps.terraform-plan.outputs.needs_apply }}
       plan_filename: ${{ steps.terraform-plan.outputs.plan_filename }}
@@ -47,6 +48,7 @@ jobs:
   apply-global:
     name: Apply global Terraform changes
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: plan-global
     environment:
       name: basic-global
@@ -78,6 +80,7 @@ jobs:
   plan-environment:
     name: Generate plan for environment Terraform changes
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: apply-global
     outputs:
       needs_apply: ${{ steps.terraform-plan.outputs.needs_apply }}
@@ -114,6 +117,7 @@ jobs:
   apply-environment:
     name: Apply environment Terraform changes
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     needs: plan-environment
     environment:
       name: basic-${{ needs.plan-environment.outputs.terraform_workspace }}

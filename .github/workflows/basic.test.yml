@@ -9,6 +9,7 @@ jobs:
   fmt:
     name: Check Terraform formatting
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
 
@@ -20,6 +21,7 @@ jobs:
   validate-global:
     name: Validate global Terraform configuration
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
 
@@ -40,6 +42,7 @@ jobs:
   validate-environment:
     name: Validate environment Terraform configuration
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v2
 
