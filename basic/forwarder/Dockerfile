@@ -69,9 +69,10 @@ CMD []
 ### Pass `--build-arg CACHE_BUST="$(date +%s)"` during build to invalidate the cache for subsequent lines
 ARG CACHE_BUST
 
-RUN aws eks update-kubeconfig --name="$STACK-$ENV-eks"
+RUN ROLE_ARN="$(aws iam list-roles | jq -r '.Roles[] | select(.RoleName == "'"$STACK-$ENV"'-eks-admin") | .Arn')" && \
+    aws eks update-kubeconfig --name="$STACK-$ENV-eks" ${ROLE_ARN:+"--role-arn=$ROLE_ARN"}
 
 # Install SSH key
 RUN mkdir -p "$HOME/.ssh" && \
-    kubectl -n bastion get secret bastion-ssh-key -o json | jq -r '.data.private_key_pem' | base64 -d > "$HOME/.ssh/id_rsa" && \
+    kubectl -n bastion get secret bastion-ssh-key -o json | jq -r '.data."ssh-privatekey"' | base64 -d > "$HOME/.ssh/id_rsa" && \
     chmod 400 "$HOME/.ssh/id_rsa"
