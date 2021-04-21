@@ -23,18 +23,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Terraform init
-        uses: ./.github/actions/terraform-init
+      - name: AWS configure
+        uses: Originate/github-actions/aws-configure@v1
         with:
-          working_directory: basic/terraform/global
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
           aws_profile: mystack
 
+      - name: Terraform init
+        uses: Originate/github-actions/terraform-init@v1
+        with:
+          working_directory: basic/terraform/global
+
       - name: Terraform plan
         id: terraform-plan
-        uses: ./.github/actions/terraform-plan
+        uses: Originate/github-actions/terraform-plan@v1
         with:
           working_directory: basic/terraform/global
 
@@ -62,17 +66,21 @@ jobs:
           name: ${{ needs.plan-global.outputs.plan_filename }}
           path: ${{ runner.temp }}
 
-      - name: Terraform init
-        uses: ./.github/actions/terraform-init
+      - name: AWS configure
+        uses: Originate/github-actions/aws-configure@v1
         with:
-          working_directory: basic/terraform/global
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
           aws_profile: mystack
 
+      - name: Terraform init
+        uses: Originate/github-actions/terraform-init@v1
+        with:
+          working_directory: basic/terraform/global
+
       - name: Terraform apply
-        uses: ./.github/actions/terraform-apply
+        uses: Originate/github-actions/terraform-apply@v1
         with:
           working_directory: basic/terraform/global
           plan_filepath: ${{ runner.temp }}/${{ needs.plan-global.outputs.plan_filename }}
@@ -90,19 +98,23 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Terraform init
-        id: terraform-init
-        uses: ./.github/actions/terraform-init
+      - name: AWS configure
+        uses: Originate/github-actions/aws-configure@v1
         with:
-          working_directory: basic/terraform/environment
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
           aws_profile: mystack
 
+      - name: Terraform init
+        id: terraform-init
+        uses: Originate/github-actions/terraform-init@v1
+        with:
+          working_directory: basic/terraform/environment
+
       - name: Terraform plan
         id: terraform-plan
-        uses: ./.github/actions/terraform-plan
+        uses: Originate/github-actions/terraform-plan@v1
         with:
           working_directory: basic/terraform/environment
           terraform_args: -var 'universal_override_docker_tag=${{ steps.terraform-init.outputs.terraform_workspace }}-${{ github.run_number }}'
@@ -131,17 +143,21 @@ jobs:
           name: ${{ needs.plan-environment.outputs.plan_filename }}
           path: ${{ runner.temp }}
 
-      - name: Terraform init
-        uses: ./.github/actions/terraform-init
+      - name: AWS configure
+        uses: Originate/github-actions/aws-configure@v1
         with:
-          working_directory: basic/terraform/environment
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
           aws_profile: mystack
 
+      - name: Terraform init
+        uses: Originate/github-actions/terraform-init@v1
+        with:
+          working_directory: basic/terraform/environment
+
       - name: Terraform apply
-        uses: ./.github/actions/terraform-apply
+        uses: Originate/github-actions/terraform-apply@v1
         with:
           working_directory: basic/terraform/environment
           plan_filepath: ${{ runner.temp }}/${{ needs.plan-environment.outputs.plan_filename }}
