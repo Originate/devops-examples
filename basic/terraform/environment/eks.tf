@@ -1,5 +1,5 @@
 module "eks" {
-  source = "github.com/Originate/terraform-modules//aws/eks?ref=e33985e"
+  source = "github.com/Originate/terraform-modules//aws/eks?ref=v1"
 
   stack        = var.stack
   env          = terraform.workspace

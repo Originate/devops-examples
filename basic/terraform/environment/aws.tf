@@ -20,7 +20,7 @@ locals {
 data "aws_caller_identity" "current" {}
 
 module "aws" {
-  source = "github.com/Originate/terraform-modules//aws/base_env?ref=e33985e"
+  source = "github.com/Originate/terraform-modules//aws/base_env?ref=v1"
 
   env          = terraform.workspace
   default_tags = local.default_tags
