@@ -1,9 +1,10 @@
 FROM nginx:stable-alpine
 
-COPY src /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN rm -rf /usr/share/nginx/html/* && \
+    sed -i -r '/^user\s+nginx;$/d' /etc/nginx/nginx.conf
 
-RUN sed -i -r '/^user\s+nginx;$/d' /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY src /usr/share/nginx/html
 
 # uid/gid 101 is nginx
 USER 101:101
