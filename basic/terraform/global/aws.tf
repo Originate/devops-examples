@@ -12,6 +12,8 @@ module "aws" {
   stack        = var.stack
   default_tags = local.default_tags
 
-  domain               = var.domain
-  ecr_repository_names = var.ecr_repository_names
+  domain                  = var.domain
+  ecr_keep_image_count    = var.ecr_keep_image_count
+  ecr_preserve_image_tags = var.ecr_preserve_image_tags
+  ecr_repository_names    = var.ecr_repository_names
 }

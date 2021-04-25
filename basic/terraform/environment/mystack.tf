@@ -58,9 +58,9 @@ module "docker_push_frontend" {
   tag           = local.docker_tags["frontend"]
   login_command = local.ecr_login_command
 
-  build_updated_images = true
+  build_updated_images = var.build_updated_docker_images
   context_path         = "${path.module}/../../frontend"
-  additional_tags      = ["latest"]
+  additional_tags      = var.additional_docker_tags
 }
 
 module "frontend" {
@@ -82,9 +82,9 @@ module "docker_push_backend" {
   tag           = local.docker_tags["backend"]
   login_command = local.ecr_login_command
 
-  build_updated_images = true
+  build_updated_images = var.build_updated_docker_images
   context_path         = "${path.module}/../../backend"
-  additional_tags      = ["latest"]
+  additional_tags      = var.additional_docker_tags
 }
 
 module "backend" {

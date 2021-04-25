@@ -117,7 +117,7 @@ jobs:
         uses: Originate/github-actions/terraform-plan@v1
         with:
           working_directory: basic/terraform/environment
-          terraform_args: -var 'universal_override_docker_tag=${{ steps.terraform-init.outputs.terraform_workspace }}-${{ github.run_number }}'
+          terraform_args: -var-file='../config/${{ steps.terraform-init.outputs.terraform_workspace }}.override.tfvars' -var 'universal_override_docker_tag=${{ github.sha }}'
 
       - name: Upload Terraform plan file
         if: ${{ steps.terraform-plan.outputs.needs_apply }}

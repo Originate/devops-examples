@@ -170,6 +170,11 @@ variable "bastion_ssh_port" {
 
 # MyStack
 
+variable "build_updated_docker_images" {
+  description = "Locally build and push new images when overriding Docker tags"
+  type        = bool
+}
+
 variable "override_docker_tags" {
   description = "Override this value to update the Docker image tag for specific components (takes priority over var.universal_docker_tag)"
   type = object(
@@ -188,4 +193,10 @@ variable "universal_override_docker_tag" {
   description = "Override this value to update the Docker image tag for all components that do not have a specific value provided in var.override_docker_tags"
   type        = string
   default     = ""
+}
+
+variable "additional_docker_tags" {
+  description = "Additional tags to add to Docker images when overriding Docker tags"
+  type        = list(string)
+  default     = []
 }
