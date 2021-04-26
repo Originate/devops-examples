@@ -1,4 +1,4 @@
-name: Basic Example - Test
+name: EKS Example - Test
 on:
   pull_request:
   push:
@@ -16,7 +16,7 @@ jobs:
       - name: Terraform fmt
         uses: Originate/github-actions/terraform-fmt@v1
         with:
-          working_directory: basic/terraform
+          working_directory: examples/eks/terraform
 
   validate-global:
     name: Validate global Terraform configuration
@@ -36,7 +36,7 @@ jobs:
       - name: Terraform init
         uses: Originate/github-actions/terraform-init@v1
         with:
-          working_directory: basic/terraform/global
+          working_directory: examples/eks/terraform/global
 
       - name: Validate Terraform dependency lock file
         run: |
@@ -46,12 +46,12 @@ jobs:
           else
             echo 'Terraform dependency lock file is up to date'
           fi
-        working-directory: basic/terraform/global
+        working-directory: examples/eks/terraform/global
 
       - name: Terraform validate
         uses: Originate/github-actions/terraform-validate@v1
         with:
-          working_directory: basic/terraform/global
+          working_directory: examples/eks/terraform/global
 
   validate-environment:
     name: Validate environment Terraform configuration
@@ -71,7 +71,7 @@ jobs:
       - name: Terraform init
         uses: Originate/github-actions/terraform-init@v1
         with:
-          working_directory: basic/terraform/environment
+          working_directory: examples/eks/terraform/environment
 
       - name: Validate Terraform dependency lock file
         run: |
@@ -81,9 +81,9 @@ jobs:
           else
             echo 'Terraform dependency lock file is up to date'
           fi
-        working-directory: basic/terraform/environment
+        working-directory: examples/eks/terraform/environment
 
       - name: Terraform validate
         uses: Originate/github-actions/terraform-validate@v1
         with:
-          working_directory: basic/terraform/environment
+          working_directory: examples/eks/terraform/environment

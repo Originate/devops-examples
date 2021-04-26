@@ -1,7 +1,8 @@
 locals {
   # Defines a map for easily passing environment default variable arguments to
-  # the ../modules/aws/rds module. Individual modules can override values by
-  # individually reassigning them or using the Terraform merge() function.
+  # the github.com/Originate/terraform-modules//aws/rds module. Individual
+  # modules can override values by individually reassigning them or using the
+  # Terraform merge() function.
   rds_attributes = {
     stack                      = var.stack
     env                        = terraform.workspace

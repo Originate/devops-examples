@@ -59,7 +59,7 @@ module "docker_push_frontend" {
   login_command = local.ecr_login_command
 
   build_updated_images = var.build_updated_docker_images
-  context_path         = "${path.module}/../../frontend"
+  context_path         = "${path.module}/../../../../basic_app/frontend"
   additional_tags      = var.additional_docker_tags
 }
 
@@ -83,7 +83,7 @@ module "docker_push_backend" {
   login_command = local.ecr_login_command
 
   build_updated_images = var.build_updated_docker_images
-  context_path         = "${path.module}/../../backend"
+  context_path         = "${path.module}/../../../../basic_app/backend"
   additional_tags      = var.additional_docker_tags
 }
 
