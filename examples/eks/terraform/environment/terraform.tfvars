@@ -1,13 +1,13 @@
 # Root
 
-account_id = "889376510746"
-profile    = "mystack"
-region     = "us-west-2"
-stack      = "mystack"
+account_id = "<aws_account_id>"
+profile    = "eksstack"
+region     = "<aws_region>"
+stack      = "eksstack"
 
 # AWS
 
-aws_base_domain                     = "mystack.originate.com"
+aws_base_domain                     = "eksstack.originate.com"
 aws_kms_key_deletion_window_in_days = 7
 
 # VPC

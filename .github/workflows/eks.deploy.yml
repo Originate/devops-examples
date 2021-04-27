@@ -1,12 +1,12 @@
 name: EKS Example - Deploy
 on:
-  workflow_run:
-    workflows:
-      - EKS Example - Test
-    branches:
-      - main
-    types:
-      - completed
+  # workflow_run:
+  #   workflows:
+  #     - EKS Example - Test
+  #   branches:
+  #     - main
+  #   types:
+  #     - completed
   push:
     tags:
       - eks-deployments/*/*

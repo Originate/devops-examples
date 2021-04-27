@@ -168,7 +168,7 @@ variable "bastion_ssh_port" {
   }
 }
 
-# MyStack
+# EKS Stack
 
 variable "build_updated_docker_images" {
   description = "Locally build and push new images when overriding Docker tags"

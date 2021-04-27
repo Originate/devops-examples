@@ -1,9 +1,9 @@
-account_id           = "889376510746"
-profile              = "mystack"
-region               = "us-west-2"
-stack                = "mystack"
+account_id           = "<aws_account_id>"
+profile              = "eksstack"
+region               = "<aws_region>"
+stack                = "eksstack"
 env                  = "global"
-domain               = "mystack.originate.com"
+domain               = "eksstack.originate.com"
 ecr_keep_image_count = 30
 ecr_preserve_image_tags = [
   "latest",
