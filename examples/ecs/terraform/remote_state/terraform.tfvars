@@ -1,0 +1,5 @@
+account_id = "889376510746"
+profile    = "ecsstack"
+region     = "us-west-2"
+stack      = "ecsstack"
+env        = "terraform"
