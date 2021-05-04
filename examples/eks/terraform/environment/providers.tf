@@ -25,6 +25,10 @@ provider "aws" {
   region              = var.region
   allowed_account_ids = [var.account_id]
   profile             = var.profile
+
+  default_tags {
+    tags = local.aws_default_tags
+  }
 }
 
 provider "helm" {

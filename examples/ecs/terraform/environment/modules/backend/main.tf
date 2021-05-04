@@ -9,8 +9,6 @@ resource "aws_ssm_parameter" "pghost" {
   description = "The hostname of the RDS instance"
   type        = "String"
   value       = module.rds.host
-
-  tags = var.default_tags
 }
 
 resource "aws_ssm_parameter" "pgport" {
@@ -18,8 +16,6 @@ resource "aws_ssm_parameter" "pgport" {
   description = "The RDS port"
   type        = "String"
   value       = module.rds.port
-
-  tags = var.default_tags
 }
 
 resource "aws_ssm_parameter" "pgdatabase" {
@@ -27,8 +23,6 @@ resource "aws_ssm_parameter" "pgdatabase" {
   description = "The name of the SQL database"
   type        = "String"
   value       = module.rds.database
-
-  tags = var.default_tags
 }
 
 resource "aws_ssm_parameter" "pguser" {
@@ -37,8 +31,6 @@ resource "aws_ssm_parameter" "pguser" {
   type        = "SecureString"
   value       = module.rds.username
   key_id      = var.secrets_kms_key_id
-
-  tags = var.default_tags
 }
 
 resource "aws_ssm_parameter" "pgpassword" {
@@ -47,8 +39,6 @@ resource "aws_ssm_parameter" "pgpassword" {
   type        = "SecureString"
   value       = module.rds.password
   key_id      = var.secrets_kms_key_id
-
-  tags = var.default_tags
 }
 
 resource "aws_ssm_parameter" "pgsslmode" {
@@ -56,14 +46,10 @@ resource "aws_ssm_parameter" "pgsslmode" {
   description = "The RDS connection SSL mode"
   type        = "String"
   value       = "no-verify"
-
-  tags = var.default_tags
 }
 
 module "ecs_application" {
   source = "github.com/Originate/terraform-modules//aws/ecs_application?ref=v1"
-
-  default_tags = var.default_tags
 
   name                       = local.name
   cluster_name               = var.ecs_cluster_name

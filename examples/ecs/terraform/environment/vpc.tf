@@ -1,9 +1,8 @@
 module "vpc" {
   source = "github.com/Originate/terraform-modules//aws/vpc?ref=v1"
 
-  stack        = var.stack
-  env          = terraform.workspace
-  default_tags = local.default_tags
+  stack = var.stack
+  env   = terraform.workspace
 
   az_count              = var.vpc_az_count
   cidr                  = var.vpc_cidr

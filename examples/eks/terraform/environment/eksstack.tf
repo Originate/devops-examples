@@ -27,9 +27,8 @@ resource "kubernetes_namespace" "stack" {
 module "ingress" {
   source = "github.com/Originate/terraform-modules//kubernetes/alb_ingress?ref=v1"
 
-  default_tags = local.default_tags
-
   kubernetes_namespace = kubernetes_namespace.stack.metadata[0].name
+  alb_tags             = merge(local.aws_default_tags, { Terraform = "false" })
   route53_zone_id      = module.aws.route53_zone_id
   acm_certificate_arn  = module.aws.acm_certificate_arn
 

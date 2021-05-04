@@ -1,9 +1,4 @@
 locals {
-  default_tags = {
-    Terraform   = "true"
-    Stack       = var.stack
-    Environment = terraform.workspace
-  }
   # Retry a few times because Docker can be flakey with multiple concurrent
   # login attempts on macOS, which can happen if multiple Docker pushes get
   # triggered around the same time
@@ -22,8 +17,7 @@ data "aws_caller_identity" "current" {}
 module "aws" {
   source = "github.com/Originate/terraform-modules//aws/base_env?ref=v1"
 
-  env          = terraform.workspace
-  default_tags = local.default_tags
+  env = terraform.workspace
 
   base_domain = var.aws_base_domain
 }

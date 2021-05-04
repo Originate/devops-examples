@@ -6,8 +6,6 @@ locals {
 module "ecs_application" {
   source = "github.com/Originate/terraform-modules//aws/ecs_application?ref=v1"
 
-  default_tags = var.default_tags
-
   name                       = "frontend"
   cluster_name               = var.ecs_cluster_name
   cluster_arn                = var.ecs_cluster_arn

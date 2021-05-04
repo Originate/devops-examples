@@ -1,8 +1,3 @@
-variable "default_tags" {
-  description = "Default tags to add to AWS resources"
-  type        = map(string)
-}
-
 variable "ecs_cluster_name" {
   description = "The name of the ECS cluster where the service should run"
   type        = string

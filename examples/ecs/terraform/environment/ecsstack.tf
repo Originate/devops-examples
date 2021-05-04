@@ -17,9 +17,8 @@ data "aws_ecr_repository" "service" {
 module "alb" {
   source = "github.com/Originate/terraform-modules//aws/alb?ref=v1"
 
-  stack        = var.stack
-  env          = terraform.workspace
-  default_tags = local.default_tags
+  stack = var.stack
+  env   = terraform.workspace
 
   vpc_id              = module.vpc.id
   subnet_ids          = module.vpc.public_subnet_ids
@@ -58,8 +57,6 @@ module "docker_push_frontend" {
 module "frontend" {
   source = "./modules/frontend"
 
-  default_tags = local.default_tags
-
   ecs_cluster_name          = module.ecs.cluster_name
   ecs_cluster_arn           = module.ecs.cluster_arn
   docker_repo               = data.aws_ecr_repository.service["frontend"].repository_url
@@ -90,8 +87,6 @@ module "docker_push_backend" {
 
 module "backend" {
   source = "./modules/backend"
-
-  default_tags = local.default_tags
 
   ecs_cluster_name          = module.ecs.cluster_name
   ecs_cluster_arn           = module.ecs.cluster_arn

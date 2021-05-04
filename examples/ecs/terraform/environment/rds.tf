@@ -6,7 +6,6 @@ locals {
   rds_attributes = {
     stack                      = var.stack
     env                        = terraform.workspace
-    default_tags               = local.default_tags
     vpc_id                     = module.vpc.id
     subnet_ids                 = module.vpc.database_subnet_ids
     instance_class             = var.rds_instance_class

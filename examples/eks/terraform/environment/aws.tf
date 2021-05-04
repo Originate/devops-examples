@@ -1,5 +1,5 @@
 locals {
-  default_tags = {
+  aws_default_tags = {
     Terraform   = "true"
     Stack       = var.stack
     Environment = terraform.workspace
@@ -22,8 +22,7 @@ data "aws_caller_identity" "current" {}
 module "aws" {
   source = "github.com/Originate/terraform-modules//aws/base_env?ref=v1"
 
-  env          = terraform.workspace
-  default_tags = local.default_tags
+  env = terraform.workspace
 
   base_domain = var.aws_base_domain
 }
