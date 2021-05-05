@@ -1,12 +1,12 @@
 name: ECS Example - Deploy
 on:
-  workflow_run:
-    workflows:
-      - ECS Example - Test
-    branches:
-      - main
-    types:
-      - completed
+  # workflow_run:
+  #   workflows:
+  #     - ECS Example - Test
+  #   branches:
+  #     - main
+  #   types:
+  #     - completed
   push:
     tags:
       - ecs-deployments/*/*

@@ -1,9 +1,10 @@
 name: ECS Example - Test
 on:
-  pull_request:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+  # pull_request:
+  # push:
+  #   branches:
+  #     - main
 
 jobs:
   fmt:
