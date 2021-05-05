@@ -3,8 +3,6 @@ set -euo pipefail
 
 # Bootstrapping for the forwarding agent
 
-export PATH="$PWD/bin:$PATH"
-
 if [ "$#" -gt 0 ]; then
   POD="$(kubectl -n bastion get pod -l "app=bastion" -o jsonpath="{.items[0].metadata.name}")"
   SSH_PORT="$(kubectl -n bastion get pod "$POD" -o jsonpath="{.spec.containers[0].ports[0].containerPort}")"

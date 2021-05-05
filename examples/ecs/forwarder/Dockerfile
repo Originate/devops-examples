@@ -8,6 +8,7 @@ RUN apt-get -y -qq update && \
         bind9-host \
         curl \
         groff-base \
+        jq \
         less \
         netcat \
         openssh-client \
@@ -17,19 +18,11 @@ RUN apt-get -y -qq update && \
         vim \
     && rm -rf /var/lib/apt/lists/*
 
-# Manually install jq (Debian is still stuck on version 1.5 as of March 2021)
-RUN curl -o /usr/local/bin/jq -LO "https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64" && chmod a+x /usr/local/bin/jq
-
 # Install AWS CLI
 RUN curl -LO https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip && \
     unzip awscli-exe-linux-x86_64.zip && \
     ./aws/install && \
     rm -rf aws awscli-exe-linux-x86_64.zip
-
-# Install kubectl
-RUN curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
-    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
-    rm -f kubectl
 
 # Configure AWS CLI
 ARG STACK
@@ -64,16 +57,3 @@ ENV STACK=$STACK \
 
 ENTRYPOINT ["./entrypoint.sh"]
 CMD []
-
-# Configure kubectl
-
-### Pass `--build-arg CACHE_BUST="$(date +%s)"` during build to invalidate the cache for subsequent lines
-ARG CACHE_BUST
-
-RUN ROLE_ARN="$(aws iam list-roles | jq -r '.Roles[] | select(.RoleName == "'"$STACK-$ENV"'-eks-admin") | .Arn')" && \
-    aws eks update-kubeconfig --name="$STACK-$ENV-eks" ${ROLE_ARN:+"--role-arn=$ROLE_ARN"}
-
-# Install SSH key
-RUN mkdir -p "$HOME/.ssh" && \
-    kubectl -n bastion get secret bastion-ssh-key -o json | jq -r '.data."ssh-privatekey"' | base64 -d > "$HOME/.ssh/id_rsa" && \
-    chmod 400 "$HOME/.ssh/id_rsa"
