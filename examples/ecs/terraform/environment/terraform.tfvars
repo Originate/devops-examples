@@ -1,8 +1,8 @@
 # Root
 
-account_id = "889376510746"
+account_id = "<aws_account_id>"
 profile    = "ecsstack"
-region     = "us-west-2"
+region     = "<aws_region>"
 stack      = "ecsstack"
 
 # AWS
