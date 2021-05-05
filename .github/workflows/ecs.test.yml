@@ -1,4 +1,4 @@
-name: EKS Example - Test
+name: ECS Example - Test
 on:
   pull_request:
   push:
@@ -16,7 +16,7 @@ jobs:
       - name: Terraform fmt
         uses: Originate/github-actions/terraform-fmt@v1
         with:
-          working_directory: examples/eks/terraform
+          working_directory: examples/ecs/terraform
 
   validate-global:
     name: Validate global Terraform configuration
@@ -31,12 +31,12 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
-          aws_profile: eksstack
+          aws_profile: ecsstack
 
       - name: Terraform init
         uses: Originate/github-actions/terraform-init@v1
         with:
-          working_directory: examples/eks/terraform/global
+          working_directory: examples/ecs/terraform/global
 
       - name: Validate Terraform dependency lock file
         run: |
@@ -46,12 +46,12 @@ jobs:
           else
             echo 'Terraform dependency lock file is up to date'
           fi
-        working-directory: examples/eks/terraform/global
+        working-directory: examples/ecs/terraform/global
 
       - name: Terraform validate
         uses: Originate/github-actions/terraform-validate@v1
         with:
-          working_directory: examples/eks/terraform/global
+          working_directory: examples/ecs/terraform/global
 
   validate-environment:
     name: Validate environment Terraform configuration
@@ -66,12 +66,12 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
-          aws_profile: eksstack
+          aws_profile: ecsstack
 
       - name: Terraform init
         uses: Originate/github-actions/terraform-init@v1
         with:
-          working_directory: examples/eks/terraform/environment
+          working_directory: examples/ecs/terraform/environment
 
       - name: Validate Terraform dependency lock file
         run: |
@@ -81,9 +81,9 @@ jobs:
           else
             echo 'Terraform dependency lock file is up to date'
           fi
-        working-directory: examples/eks/terraform/environment
+        working-directory: examples/ecs/terraform/environment
 
       - name: Terraform validate
         uses: Originate/github-actions/terraform-validate@v1
         with:
-          working_directory: examples/eks/terraform/environment
+          working_directory: examples/ecs/terraform/environment

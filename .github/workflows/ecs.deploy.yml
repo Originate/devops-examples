@@ -1,15 +1,15 @@
-name: EKS Example - Deploy
+name: ECS Example - Deploy
 on:
-  # workflow_run:
-  #   workflows:
-  #     - EKS Example - Test
-  #   branches:
-  #     - main
-  #   types:
-  #     - completed
+  workflow_run:
+    workflows:
+      - ECS Example - Test
+    branches:
+      - main
+    types:
+      - completed
   push:
     tags:
-      - eks-deployments/*/*
+      - ecs-deployments/*/*
 
 jobs:
   plan-global:
@@ -29,18 +29,18 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
-          aws_profile: eksstack
+          aws_profile: ecsstack
 
       - name: Terraform init
         uses: Originate/github-actions/terraform-init@v1
         with:
-          working_directory: examples/eks/terraform/global
+          working_directory: examples/ecs/terraform/global
 
       - name: Terraform plan
         id: terraform-plan
         uses: Originate/github-actions/terraform-plan@v1
         with:
-          working_directory: examples/eks/terraform/global
+          working_directory: examples/ecs/terraform/global
 
       - name: Upload Terraform plan file
         if: ${{ steps.terraform-plan.outputs.needs_apply }}
@@ -55,7 +55,7 @@ jobs:
     timeout-minutes: 15
     needs: plan-global
     environment:
-      name: eks-global
+      name: ecs-global
     if: ${{ needs.plan-global.outputs.needs_apply }}
     steps:
       - uses: actions/checkout@v2
@@ -72,17 +72,17 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
-          aws_profile: eksstack
+          aws_profile: ecsstack
 
       - name: Terraform init
         uses: Originate/github-actions/terraform-init@v1
         with:
-          working_directory: examples/eks/terraform/global
+          working_directory: examples/ecs/terraform/global
 
       - name: Terraform apply
         uses: Originate/github-actions/terraform-apply@v1
         with:
-          working_directory: examples/eks/terraform/global
+          working_directory: examples/ecs/terraform/global
           plan_filepath: ${{ runner.temp }}/${{ needs.plan-global.outputs.plan_filename }}
 
   plan-environment:
@@ -104,19 +104,19 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
-          aws_profile: eksstack
+          aws_profile: ecsstack
 
       - name: Terraform init
         id: terraform-init
         uses: Originate/github-actions/terraform-init@v1
         with:
-          working_directory: examples/eks/terraform/environment
+          working_directory: examples/ecs/terraform/environment
 
       - name: Terraform plan
         id: terraform-plan
         uses: Originate/github-actions/terraform-plan@v1
         with:
-          working_directory: examples/eks/terraform/environment
+          working_directory: examples/ecs/terraform/environment
           terraform_args: -var-file='../config/${{ steps.terraform-init.outputs.terraform_workspace }}.override.tfvars' -var 'universal_override_docker_tag=${{ github.sha }}'
 
       - name: Upload Terraform plan file
@@ -132,7 +132,7 @@ jobs:
     timeout-minutes: 60
     needs: plan-environment
     environment:
-      name: eks-${{ needs.plan-environment.outputs.terraform_workspace }}
+      name: ecs-${{ needs.plan-environment.outputs.terraform_workspace }}
     if: ${{ !failure() && !cancelled() && needs.plan-environment.outputs.needs_apply }}
     steps:
       - uses: actions/checkout@v2
@@ -149,15 +149,15 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: us-west-2
-          aws_profile: eksstack
+          aws_profile: ecsstack
 
       - name: Terraform init
         uses: Originate/github-actions/terraform-init@v1
         with:
-          working_directory: examples/eks/terraform/environment
+          working_directory: examples/ecs/terraform/environment
 
       - name: Terraform apply
         uses: Originate/github-actions/terraform-apply@v1
         with:
-          working_directory: examples/eks/terraform/environment
+          working_directory: examples/ecs/terraform/environment
           plan_filepath: ${{ runner.temp }}/${{ needs.plan-environment.outputs.plan_filename }}
