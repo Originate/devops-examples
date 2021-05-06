@@ -11,4 +11,3 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    user: root

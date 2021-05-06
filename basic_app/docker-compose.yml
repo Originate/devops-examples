@@ -40,6 +40,7 @@ services:
   frontend:
     ports:
       - "8080:8080"
+    user: root
     restart: unless-stopped
     depends_on:
       - backend
